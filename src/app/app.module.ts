@@ -13,7 +13,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { FormsModule } from '@angular/forms';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+ 
 import { HomeComponent } from './home/home.component';
 import { AssetsComponent } from './assets/assets.component';
 import { WalletComponent } from './wallet/wallet.component';
@@ -38,7 +39,8 @@ import { WalletComponent } from './wallet/wallet.component';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     provideClientHydration()

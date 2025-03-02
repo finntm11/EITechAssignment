@@ -10,6 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
   styleUrl: './assets.component.css',
 })
 export class AssetsComponent implements OnInit, AfterViewInit {
+  isLoading: boolean = true;
   assets: ICoincapAsset[] = [];
   displayedColumns: string[] = ['rank', 'name', 'priceUsd', 'supply'];
   dataSource: MatTableDataSource<ICoincapAsset> =
@@ -28,9 +29,11 @@ export class AssetsComponent implements OnInit, AfterViewInit {
         this.assets = result.data;
         this.dataSource = new MatTableDataSource(this.assets);
         this.pageOptions = this.generatePageOptions(this.assets.length);
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Failed to fetch assets:', error);
+        this.isLoading = false;
       },
     });
   }
