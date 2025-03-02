@@ -1,0 +1,89 @@
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+  
+  .header {
+    padding: 16px 0;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .mat-elevation-z8 {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .mat-header-row {
+    background-color: #f6f9fc;
+    height: 56px;
+  }
+  
+  .mat-header-cell {
+    color: #5d6778;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0 16px;
+  }
+  
+  .mat-row {
+    height: 52px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .mat-row:hover {
+    background-color: #f5f9ff;
+  }
+  
+  .mat-cell {
+    color: #333;
+    font-size: 14px;
+    padding: 0 16px;
+  }
+  
+  .mat-column-priceUsd {
+    font-weight: 500;
+    color: #2b6cb0;
+  }
+  
+  .mat-column-rank {
+    width: 80px;
+  }
+  
+  .mat-column-name {
+    padding-left: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .main-container {
+      padding: 12px;
+    }
+    
+    .mat-header-row, .mat-row {
+      padding: 0 8px;
+    }
+    
+    .mat-cell, .mat-header-cell {
+      padding: 0 8px;
+    }
+  }
+  
+  .mat-sort-header-arrow {
+    color: #2b6cb0;
+  }

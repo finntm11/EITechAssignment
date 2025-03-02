@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CryptoService } from './crypto.service';
+import { CoincapService } from './coincap.service';
 
-describe('CryptoService', () => {
-  let service: CryptoService;
+describe('CoincapService', () => {
+  let service: CoincapService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CryptoService);
+    service = TestBed.inject(CoincapService);
   });
 
   it('should be created', () => {
