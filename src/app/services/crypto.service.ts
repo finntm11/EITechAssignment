@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CryptoService {
 
-  private apiUrl = 'https://api.coincap.io/v2/assets';  // CoinCap API URL
+  private apiUrl = 'https://api.coincap.io/v2/assets';
 
   constructor(private http: HttpClient) { }
 

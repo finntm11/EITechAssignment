@@ -1,19 +1,19 @@
-<h2>Top Cryptocurrencies</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Rank</th>
-      <th>Name</th>
-      <th>Price (USD)</th>
-      <th>Market Cap</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let coin of cryptoData">
-      <td>{{ coin.rank }}</td>
-      <td>{{ coin.name }}</td>
-      <td>{{ coin.priceUsd | number:'1.2-2' }}</td>
-      <td>{{ coin.marketCapUsd | number:'1.0-0' }}</td>
-    </tr>
-  </tbody>
-</table>
+<mat-toolbar color="primary" class="main-toolbar">
+  <span class="title">Expert Institute Technical Assignment</span>
+  <span class="spacer"></span>
+  <div class="nav-buttons">
+    <button mat-button routerLink="/home" class="nav-button">
+      <span class="nav-label">Home</span>
+    </button>
+    <button mat-button routerLink="/assets" class="nav-button">
+      <span class="nav-label">Assets</span>
+    </button>
+    <button mat-button routerLink="/wallet" class="nav-button">
+      <span class="nav-label">Wallet</span>
+    </button>
+  </div>
+</mat-toolbar>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>

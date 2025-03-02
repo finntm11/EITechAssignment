@@ -1,0 +1,57 @@
+.main-toolbar {
+  height: 70px;
+  font-size: 16px;
+  padding: 0 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-button {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-label {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.content {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .main-toolbar {
+    height: 60px;
+    padding: 0 16px;
+  }
+  
+  .title {
+    font-size: 16px;
+  }
+  
+  .nav-button {
+    padding: 0 12px;
+  }
+}
