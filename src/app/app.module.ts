@@ -14,9 +14,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'; 
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
  
 import { HomeComponent } from './home/home.component';
 import { AssetsComponent } from './assets/assets.component';
+import { AssetDetailsComponent } from './assets/asset-details/asset-details.component';
 import { WalletComponent } from './wallet/wallet.component';
 
 @NgModule({
@@ -24,7 +27,9 @@ import { WalletComponent } from './wallet/wallet.component';
     AppComponent,
     HomeComponent,
     AssetsComponent,
-    WalletComponent
+    AssetDetailsComponent,
+    WalletComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -40,7 +45,9 @@ import { WalletComponent } from './wallet/wallet.component';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatTooltipModule,
   ],
   providers: [
     provideClientHydration()

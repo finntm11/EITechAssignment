@@ -1,5 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { ICoincapAsset, CoincapService } from '../services/coincap.service';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { ICoinCapAsset, CoinCapAssetService } from '../services/coin-cap-asset.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -11,20 +17,30 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class AssetsComponent implements OnInit, AfterViewInit {
   isLoading: boolean = true;
-  assets: ICoincapAsset[] = [];
-  displayedColumns: string[] = ['rank', 'name', 'priceUsd', 'supply'];
-  dataSource: MatTableDataSource<ICoincapAsset> =
-    new MatTableDataSource<ICoincapAsset>();
-  pageOptions: number[] = []; 
-  searchQuery: string = "";
+  isTableInitialized: boolean = false;
+  assets: ICoinCapAsset[] = [];
+  displayedColumns: string[] = [
+    'rank',
+    'name',
+    'priceUsd',
+    'supply',
+    'actions',
+  ];
+  dataSource: MatTableDataSource<ICoinCapAsset> =
+    new MatTableDataSource<ICoinCapAsset>();
+  pageOptions: number[] = [];
+  searchQuery: string = '';
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private readonly coinCapService: CoincapService) {}
+  constructor(
+    private readonly coinCapAssetService: CoinCapAssetService,
+    private readonly cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.coinCapService.getCoincapAssets().subscribe({
+    this.coinCapAssetService.getCoincapAssets().subscribe({
       next: (result) => {
         this.assets = result.data;
         this.dataSource = new MatTableDataSource(this.assets);
@@ -39,9 +55,18 @@ export class AssetsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.sort && this.paginator) {
+    this.initializeTable();
+  }
+
+  ngAfterViewChecked() {
+    this.initializeTable();
+  }
+
+  initializeTable() {
+    if (!this.isTableInitialized && this.sort && this.paginator && this.dataSource.data.length) {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.isTableInitialized = true;
     }
   }
 

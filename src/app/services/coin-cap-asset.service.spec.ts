@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CoincapService } from './coincap.service';
+import { CoincapService } from './coin-cap-asset.service';
 
 describe('CoincapService', () => {
   let service: CoincapService;

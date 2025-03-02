@@ -1,0 +1,21 @@
+<div *ngIf="isLoading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!isLoading" class="main-container">
+  <div class="header-container">
+    <h1>{{ asset.name }} Details</h1>
+  </div>
+  <div class="details-container">
+    <p>Symbol: {{ asset.symbol }}</p>
+    <p>Rank: {{ asset.rank }}</p>
+    <p>Supply: {{ asset.maxSupply }}</p>
+    <p>Market Cap: {{ asset.marketCapUsd }}</p>
+    <p>24 Hr Volume: {{ asset.volumeUsd24Hr }}</p>
+    <p>Price: {{ asset.priceUsd }}</p>
+    <p>24 Hr Change Percent: {{ asset.changePercent24Hr }}</p>
+    <p>24 Hr Volume Weighted Average Price: {{ asset.vwap24Hr }}</p>
+  </div>
+  <div class="price-history">
+    <!-- <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot> -->
+  </div>
+</div>
