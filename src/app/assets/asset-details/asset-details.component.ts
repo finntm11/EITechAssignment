@@ -3,7 +3,7 @@ import {
   ICoinCapAsset,
   ICoinCapAssetHistory,
   CoinCapAssetService,
-} from '../../services/coin-cap-asset.service';
+} from '../../_services/coin-cap-asset.service';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -45,10 +45,7 @@ export class AssetDetailsComponent implements OnInit {
 
   generateGraph(assetData: ICoinCapAssetHistory[]): any {
     const dates = assetData.map((item) => new Date(item.time));
-
-    // Format prices with 2 decimal places and a dollar sign
     const prices = assetData.map((item) => parseFloat(item.priceUsd));
-
     const formattedPrices = assetData.map(
       (item) => `$${parseFloat(item.priceUsd).toFixed(2)}`
     );

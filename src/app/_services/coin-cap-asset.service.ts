@@ -21,6 +21,10 @@ export class CoinCapAssetService {
   getAssetDailyHistory(id: string | null): Observable<ICoinCapAssetHistoryResponse> {
     return this.http.get<ICoinCapAssetHistoryResponse>(`${this.apiUrl}/${id}/history?interval=d1`)
   }
+
+  getAssetMinuteHistory(id: string | null): Observable<ICoinCapAssetHistoryResponse> {
+    return this.http.get<ICoinCapAssetHistoryResponse>(`${this.apiUrl}/${id}/history?interval=m1`)
+  }
 }
 
 export interface ICoinCapAsset {

@@ -8,7 +8,7 @@ import {
 import {
   ICoinCapAsset,
   CoinCapAssetService,
-} from '../services/coin-cap-asset.service';
+} from '../_services/coin-cap-asset.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';

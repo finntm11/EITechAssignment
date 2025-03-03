@@ -1,1 +1,118 @@
-<p>wallet works!</p>
+<div class="wallet-dashboard">
+    <div *ngIf="isLoading" class="loading-state">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p class="loading-text">Loading wallet...</p>
+    </div>
+  
+    <div *ngIf="!isLoading" class="wallet-content">
+      <header class="wallet-header">
+        <h1>Welcome to your Wallet</h1>
+        <div class="wallet-value">
+          <span class="label">Current Wallet Value:</span>
+          <span class="value">{{ wallet.totalValue | currency }}</span>
+        </div>
+        <button class="primary-button" (click)="openTradeModal()">
+          <mat-icon>swap_horiz</mat-icon>
+          Trade
+        </button>
+      </header>
+  
+      <section class="assets-section">
+        <h2>Your Assets</h2>
+        
+        <div *ngIf="wallet.assets.length !== 0" class="assets-grid">
+          <div *ngFor="let asset of wallet.assets" class="asset-card">
+            <div class="asset-card-header">
+              <h3>{{asset.name}}</h3>
+            </div>
+            <div class="asset-card-body">
+              <div class="asset-detail">
+                <span class="asset-label">Amount Owned:</span>
+                <span class="asset-value">{{asset.amountOwned}}</span>
+              </div>
+              <div class="asset-detail">
+                <span class="asset-label">Value:</span>
+                <span class="asset-value">{{asset.valueUsd | currency}}</span>
+              </div>
+            </div>
+            <!-- <div class="asset-chart">
+              <plotly-plot
+                [data]="graph.data"
+                [layout]="graph.layout"
+                [config]="{ responsive: true }"
+              ></plotly-plot>
+            </div> -->
+          </div>
+        </div>
+        
+        <div *ngIf="wallet.assets.length === 0" class="empty-state">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <p>You don't have any assets yet</p>
+          <button class="secondary-button" (click)="openTradeModal()">Buy your first asset</button>
+        </div>
+      </section>
+  
+      <!-- Trade Modal -->
+      <div class="modal-backdrop" *ngIf="isTradeModalOpen" (click)="closeModalOnBackdropClick($event)">
+        <div class="modal-container">
+          <div class="modal-header">
+            <h2>Trade Assets</h2>
+            <button class="close-button" (click)="closeTradeModal()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          
+          <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="trade-form">
+            <div class="form-field">
+              <label for="action">Action:</label>
+              <mat-button-toggle-group formControlName="action" id="action">
+                <mat-button-toggle value="buy">Buy</mat-button-toggle>
+                <mat-button-toggle value="sell">Sell</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+  
+            <div class="form-field">
+              <label for="asset">Asset:</label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="text"
+                  id="asset"
+                  formControlName="asset"
+                  placeholder="Enter asset name"
+                />
+                <mat-error *ngIf="tradeForm.get('asset')?.hasError('invalidAsset') && tradeForm.get('asset')?.touched">
+                  Invalid asset name
+                </mat-error>
+              </mat-form-field>
+            </div>
+  
+            <div class="form-field">
+              <label for="amount">Amount:</label>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  type="number"
+                  id="amount"
+                  formControlName="amount"
+                  placeholder="Enter amount"
+                />
+              </mat-form-field>
+            </div>
+  
+            <div class="trade-summary">
+              <p class="transaction-label">Total Price:</p>
+              <p class="transaction-value">{{ totalPrice | currency }}</p>
+            </div>
+  
+            <div class="form-actions">
+              <button type="button" class="secondary-button" (click)="closeTradeModal()">Cancel</button>
+              <button type="submit" class="primary-button" [disabled]="tradeForm.invalid">
+                {{ tradeForm.get('action')?.value === 'buy' ? 'Buy' : 'Sell' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
