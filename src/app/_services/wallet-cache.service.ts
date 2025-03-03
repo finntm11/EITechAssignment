@@ -18,20 +18,18 @@ export class WalletCacheService {
 }
 
 export interface IWallet {
-  totalValue: string;
+  totalValue: number;
   assets: IWalletAsset[];
-}
-
-export interface IWalletAsset {
-  name: string;
-  amountOwned: string;
-  valueUsd: string;
-  changePercent: string;
-  history: IWalletAssetHistory[];
+  tradingSince: Date;
   graph?: any;
 }
 
-export interface IWalletAssetHistory {
-  time: string;
-  priceUsd: string;
+export interface IWalletAsset {
+  id: string;
+  name: string;
+  amountOwned: number;
+  valueUsd: number;
+  changePercent: number;
+  ownedSince: Date;
+  graph?: any;
 }
