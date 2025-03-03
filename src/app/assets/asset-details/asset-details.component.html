@@ -1,6 +1,7 @@
 <div class="container">
   <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Loading assets...</p>
   </div>
 
   <div *ngIf="!isLoading" class="dashboard-container">

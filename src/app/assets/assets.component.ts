@@ -5,7 +5,10 @@ import {
   ViewChild,
   ChangeDetectorRef,
 } from '@angular/core';
-import { ICoinCapAsset, CoinCapAssetService } from '../services/coin-cap-asset.service';
+import {
+  ICoinCapAsset,
+  CoinCapAssetService,
+} from '../services/coin-cap-asset.service';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -24,6 +27,7 @@ export class AssetsComponent implements OnInit, AfterViewInit {
     'name',
     'priceUsd',
     'supply',
+    'changePercent24Hr',
     'actions',
   ];
   dataSource: MatTableDataSource<ICoinCapAsset> =
@@ -33,6 +37,8 @@ export class AssetsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  Number = Number;
 
   constructor(
     private readonly coinCapAssetService: CoinCapAssetService,
@@ -63,7 +69,12 @@ export class AssetsComponent implements OnInit, AfterViewInit {
   }
 
   initializeTable() {
-    if (!this.isTableInitialized && this.sort && this.paginator && this.dataSource.data.length) {
+    if (
+      !this.isTableInitialized &&
+      this.sort &&
+      this.paginator &&
+      this.dataSource.data.length
+    ) {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       this.isTableInitialized = true;
@@ -76,6 +87,11 @@ export class AssetsComponent implements OnInit, AfterViewInit {
     if (this.paginator) {
       this.paginator.firstPage();
     }
+  }
+
+  resetSearch() {
+    this.searchQuery = '';
+    this.applyFilter();
   }
 
   private generatePageOptions(totalAssets: number): number[] {
