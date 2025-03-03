@@ -1,27 +1,31 @@
-# EITechAssignment
+# Expert Institute Technical Interview Project
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.12.
+This project was created to satisfy the technical aspect of the Expert Institute full stack developer interview process
 
-## Development server
+## Description
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This project is an Angular web app that uses [CoinCap API 2.0](https://docs.coincap.io/) for data. The app allows you to view a high level overview of all assets fetched from CoinCap as well as a detailed view of each asset that includes additional information. It also includes a wallet that allows you to simulate buying and selling of assets. The wallet page should reflect the assets you currently have, each individual assets value is USD, the accumulated value of your wallet and the historical performance of your wallet. Changes made to your wallet are cached into local storage and should persist between session, 
 
-## Code scaffolding
+### Dependencies
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* Node.js version 20.18.3
+* Angular version 17.3.12
 
-## Build
+### Executing program
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* To run the app, ensure you are in the root directory and type the command ng serve in the terminal.
+* If you you would like the page to open automatically use ng serve -o, but if not the app should be running on http://localhost:4200/
 
-## Running unit tests
+### Testing
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+* Testing via Jest has been configured.
+* While the test coverage is severely lacking, they should still run with the command npm test
 
-## Running end-to-end tests
+## Help
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+For any questions or issues, feel free to email me at fmartsula@gmail.com
 
-## Further help
+## Author
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Finn Tomasula Martin
+
