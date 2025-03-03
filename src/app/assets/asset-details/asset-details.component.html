@@ -1,21 +1,91 @@
-<div *ngIf="isLoading" class="loading-container">
-  <mat-spinner></mat-spinner>
-</div>
-<div *ngIf="!isLoading" class="main-container">
-  <div class="header-container">
-    <h1>{{ asset.name }} Details</h1>
+<div class="container">
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
   </div>
-  <div class="details-container">
-    <p>Symbol: {{ asset.symbol }}</p>
-    <p>Rank: {{ asset.rank }}</p>
-    <p>Supply: {{ asset.maxSupply }}</p>
-    <p>Market Cap: {{ asset.marketCapUsd }}</p>
-    <p>24 Hr Volume: {{ asset.volumeUsd24Hr }}</p>
-    <p>Price: {{ asset.priceUsd }}</p>
-    <p>24 Hr Change Percent: {{ asset.changePercent24Hr }}</p>
-    <p>24 Hr Volume Weighted Average Price: {{ asset.vwap24Hr }}</p>
-  </div>
-  <div class="price-history">
-    <plotly-plot [data]="graph.data" [layout]="graph.layout"></plotly-plot>
+
+  <div *ngIf="!isLoading" class="dashboard-container">
+    <!-- Asset Details Card -->
+    <mat-card class="details-card">
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="asset-title">
+            {{ asset.name }}
+            <span class="asset-symbol">({{ asset.symbol }})</span>
+          </h1>
+        </mat-card-title>
+        <mat-card-subtitle>Rank #{{ asset.rank }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="metric-label">Current Price: </span>
+            <span class="metric-value price-value">{{
+              asset.priceUsd | currency
+            }}</span>
+            <span
+              class="metric-change"
+              [ngClass]="
+                Number(asset.changePercent24Hr) >= 0
+                  ? 'positive-change'
+                  : 'negative-change'
+              "
+            >
+              {{
+                (Number(asset.changePercent24Hr) >= 0 ? "+" : "") +
+                  (asset.changePercent24Hr | number : "1.2-2")
+              }}%
+            </span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">Market Cap: </span>
+            <span class="metric-value">{{
+              asset.marketCapUsd | currency : "USD" : "symbol" : "1.0-0"
+            }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">24h Volume: </span>
+            <span class="metric-value">{{
+              asset.volumeUsd24Hr | currency : "USD" : "symbol" : "1.0-0"
+            }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span class="metric-label">Supply: </span>
+            <span class="metric-value">{{
+              asset.maxSupply | number : "1.0-0"
+            }}</span>
+          </div>
+
+          <div class="metric-item">
+            <span
+              class="metric-label"
+              matTooltip="Volume-Weighted Average Price"
+              >VWAP (24h):
+            </span>
+            <span class="metric-value">{{ asset.vwap24Hr | currency }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Price History Chart Card -->
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>
+          <h2 class="chart-title">Price History</h2>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <plotly-plot
+          [data]="graph.data"
+          [layout]="graph.layout"
+          [config]="{ responsive: true }"
+        ></plotly-plot>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

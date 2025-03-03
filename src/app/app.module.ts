@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatCardModule} from '@angular/material/card';
 import * as PlotlyJS from 'plotly.js-dist-min';
 import { PlotlyModule } from 'angular-plotly.js';
 
@@ -52,7 +53,8 @@ import { WalletComponent } from './wallet/wallet.component';
     MatProgressSpinnerModule,
     MatIconModule,
     MatTooltipModule,
-    PlotlyModule
+    PlotlyModule,
+    MatCardModule
   ],
   providers: [
     provideClientHydration()

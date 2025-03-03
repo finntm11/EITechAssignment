@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {
   ICoinCapAsset,
+  ICoinCapAssetHistory,
   CoinCapAssetService,
 } from '../../services/coin-cap-asset.service';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-asset-details',
@@ -13,13 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 export class AssetDetailsComponent implements OnInit {
   isLoading = true;
   asset!: ICoinCapAsset;
-  public graph = {
-    data: [
-        { x: [1, 2, 3], y: [2, 6, 3], type: 'scatter', mode: 'lines+points', marker: {color: 'red'} },
-        { x: [1, 2, 3], y: [2, 5, 3], type: 'bar' },
-    ],
-    layout: {width: 320, height: 240, title: 'A Fancy Plot'}
-};
+  public graph: any;
+  Number = Number;
 
   constructor(
     private readonly coinCapAssetService: CoinCapAssetService,
@@ -27,19 +24,58 @@ export class AssetDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const assetId: string | null = params.get('id');
 
-      this.coinCapAssetService.getCoincapAssetById(assetId).subscribe({
-        next: (result) => {
-          this.asset = result.data;
+      forkJoin({
+        $asset: this.coinCapAssetService.getCoincapAssetById(assetId),
+        $assetHistory: this.coinCapAssetService.getAssetDailyHistory(assetId),
+      }).subscribe({
+        next: (results) => {
+          this.asset = results.$asset.data;
+          this.graph = this.generateGraph(results.$assetHistory.data);
           this.isLoading = false;
         },
         error: (error) => {
-          console.error("Failed to get asset:", error);
-          this.isLoading = false;
-        }
+          console.error('Failed to get asset:', error);
+        },
       });
     });
+  }
+
+  generateGraph(assetData: ICoinCapAssetHistory[]): any {
+    const dates = assetData.map((item) => new Date(item.time));
+
+    // Format prices with 2 decimal places and a dollar sign
+    const prices = assetData.map((item) => parseFloat(item.priceUsd));
+
+    const formattedPrices = assetData.map(
+      (item) => `$${parseFloat(item.priceUsd).toFixed(2)}`
+    );
+
+    const trace = {
+      x: dates,
+      y: prices,
+      text: formattedPrices,
+      hoverinfo: 'x+text',
+      mode: 'lines+markers',
+      type: 'scatter',
+      marker: { color: 'blue', size: 4 },
+      line: { color: 'blue' },
+    };
+
+    const layout = {
+      title: 'Price over Time',
+      xaxis: { title: { text: 'Time', standoff: 15 } },
+      yaxis: { title: { text: 'Price (USD)', standoff: 15 } },
+      showlegend: false,
+      margin: { l: 70, r: 50, t: 50, b: 70 },
+      hovermode: 'closest',
+    };
+
+    return {
+      data: [trace],
+      layout: layout,
+    };
   }
 }
