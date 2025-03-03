@@ -27,7 +27,7 @@ export class WalletComponent implements OnInit {
   wallet: IWallet = {
     totalValue: 0,
     assets: [],
-    tradingSince: new Date,
+    tradingSince: new Date(),
   };
   tradeForm: FormGroup;
 
@@ -43,22 +43,25 @@ export class WalletComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {this.coinCapAssetService.getCoincapAssets().subscribe({
+  ngOnInit(): void {
+    this.coinCapAssetService.getCoincapAssets().subscribe({
       next: (result) => {
         this.availableAssets = result.data;
         const cachedSettings = this.walletCacheService.loadWallet();
         if (cachedSettings) {
           this.wallet = cachedSettings;
-          // if (!this.wallet.graph) {
-          //   this.wallet.graph = this.generateWalletGraph(this.wallet).subscribe({
-          //     next: (graphData) => {
-          //       this.wallet.graph = graphData;
-          //     },
-          //     error: (error) => {
-          //       console.error("Error generating graph:", error);
-          //     }
-          //   });
-          // }
+          if (!this.wallet.graph) {
+            this.wallet.graph = this.generateWalletGraph(this.wallet).subscribe(
+              {
+                next: (graphData) => {
+                  this.wallet.graph = graphData;
+                },
+                error: (error) => {
+                  console.error('Error generating graph:', error);
+                },
+              }
+            );
+          }
         }
         this.tradeForm.get('amount')?.valueChanges.subscribe((amount) => {
           this.updateTotalPrice(amount);
@@ -73,73 +76,83 @@ export class WalletComponent implements OnInit {
   }
 
   generateWalletGraph(wallet: IWallet): Observable<any> {
-    const startDate = wallet?.tradingSince || new Date();
+    const startDate = new Date(wallet?.tradingSince) || new Date();
     const endDate = new Date();
-    console.log("start:", startDate);
-    console.log("end:", endDate);
+    console.log('start:', startDate);
+    console.log('end:', endDate);
 
     const assetHistoryRequests = wallet.assets.map((asset) =>
-      this.coinCapAssetService.getAssetMinuteHistory(asset.id, startDate, endDate).pipe(
-        map((response: ICoinCapAssetHistoryResponse) => {
-          const dates = response.data.map((history) => new Date(history.time).toLocaleString());
-          const prices = response.data.map((history) => parseFloat(history.priceUsd) * asset.amountOwned);
-          const formattedPrices = prices.map((price) => `$${price.toFixed(2)}`);
+      this.coinCapAssetService
+        .getAssetMinuteHistory(asset.id, startDate, endDate)
+        .pipe(
+          map((response: ICoinCapAssetHistoryResponse) => {
+            const dates = response.data.map((history) =>
+              new Date(history.time).toLocaleString()
+            );
+            const prices = response.data.map(
+              (history) => parseFloat(history.priceUsd) * asset.amountOwned
+            );
+            const formattedPrices = prices.map(
+              (price) => `$${price.toFixed(2)}`
+            );
 
-          return { dates, prices, formattedPrices };
-        }),
-        catchError((error) => {
-          console.error('Error fetching asset history:', error);
-          return of(null); // If any error occurs, just return null
-        })
-      )
+            return { dates, prices, formattedPrices };
+          }),
+          catchError((error) => {
+            console.error('Error fetching asset history:', error);
+            return of(null);
+          })
+        )
     );
 
     return new Observable((observer) => {
-      forkJoin(assetHistoryRequests).pipe(
-        map((assetDataList) => {
-          const traces = assetDataList
-            .filter((assetData) => assetData !== null)
-            .map((assetData, index) => {
-              if (assetData) {
-                return {
-                  x: assetData.dates,
-                  y: assetData.prices,
-                  text: assetData.formattedPrices,
-                  hoverinfo: 'x+text',
-                  mode: 'lines+markers',
-                  type: 'scatter',
-                  marker: { color: this.getColorForAsset(index), size: 4 },
-                  line: { color: this.getColorForAsset(index) },
-                  name: wallet.assets[index].name 
-                };
-              } else {
-                return null;
-              }
-            });
+      forkJoin(assetHistoryRequests)
+        .pipe(
+          map((assetDataList) => {
+            const traces = assetDataList
+              .filter((assetData) => assetData !== null)
+              .map((assetData, index) => {
+                if (assetData) {
+                  return {
+                    x: assetData.dates,
+                    y: assetData.prices,
+                    text: assetData.formattedPrices,
+                    hoverinfo: 'x+text',
+                    mode: 'lines+markers',
+                    type: 'scatter',
+                    marker: { color: this.getColorForAsset(index), size: 4 },
+                    line: { color: this.getColorForAsset(index) },
+                    name: wallet.assets[index].name,
+                  };
+                } else {
+                  return null;
+                }
+              });
 
-          const layout = {
-            title: 'Wallet Value over Time',
-            xaxis: { title: { text: 'Time', standoff: 15 } },
-            yaxis: { title: { text: 'Value (USD)', standoff: 15 } },
-            showlegend: true,
-            margin: { l: 70, r: 50, t: 50, b: 70 },
-            hovermode: 'closest',
-          };
+            const layout = {
+              title: 'Wallet Value over Time',
+              xaxis: { title: { text: 'Time', standoff: 15 } },
+              yaxis: { title: { text: 'Value (USD)', standoff: 15 } },
+              showlegend: true,
+              margin: { l: 70, r: 50, t: 50, b: 70 },
+              hovermode: 'closest',
+            };
 
-          return {
-            data: traces,
-            layout: layout,
-          };
-        })
-      ).subscribe(
-        (graphData) => {
-          observer.next(graphData);
-          observer.complete();
-        },
-        (error) => {
-          observer.error(error);
-        }
-      );
+            return {
+              data: traces,
+              layout: layout,
+            };
+          })
+        )
+        .subscribe({
+          next: (graphData) => {
+            observer.next(graphData);
+            observer.complete();
+          },
+          error: (error) => {
+            observer.error(error);
+          },
+        });
     });
   }
 
@@ -238,13 +251,19 @@ export class WalletComponent implements OnInit {
       }
     }
 
-    this.wallet.totalValue = this.wallet.assets
-      .reduce((sum, asset) => {
-        return sum + asset.valueUsd;
-      }, 0);
+    this.wallet.totalValue = this.wallet.assets.reduce((sum, asset) => {
+      return sum + asset.valueUsd;
+    }, 0);
 
-    this.walletCacheService.saveWallet(this.wallet);
-
-    this.closeTradeModal();
+    this.wallet.graph = this.generateWalletGraph(this.wallet).subscribe({
+      next: (graphData) => {
+        this.wallet.graph = graphData;
+        this.walletCacheService.saveWallet(this.wallet);
+        this.closeTradeModal();
+      },
+      error: (error) => {
+        console.error('Error generating graph:', error);
+      },
+    });
   }
 }
